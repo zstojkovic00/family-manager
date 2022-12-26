@@ -1,0 +1,160 @@
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet"/>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" style="color:white;">Family Manager</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+  <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarColor02">
+     <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+           <a class="nav-link" (click)="onOpenModal('add')">Add Family <span class="sr-only">(current)</span></a>           
+        </li>
+     </ul>
+     <form class="form-inline my-2 my-lg-0">
+        <input type="search" (ngModelChange)="searchFamily(key.value)" #key="ngModel" ngModel
+         name="key" id="searchName" class="form-control mr-sm-2" placeholder="Search family..." required>
+     </form>
+  </div>
+</nav>
+<div class="container" id="main-container">
+    <div class="row">
+        <div *ngFor="let family of family123" class="col-md-6 col-xl-3">
+            <div class="card m-b-30">
+                <div class="card-body row">
+                    <div class="col-6">
+                        <a href=""><img src="{{family?.imageUrl}}" alt="" class="img-fluid rounded-circle w-60"></a>
+                    </div>
+                    <div class="col-6 card-title align-self-center mb-0">
+                        <h5>{{family?.name}}</h5>
+                        <p class="m-0">{{family?.jobTitle}}</p>
+                    </div>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><i class="fa fa-envelope float-right"></i>Email : <a href="#">{{family?.email}}</a></li>
+                    <li class="list-group-item"><i class="fa fa-phone float-right"></i>Phone : {{family?.phone}}</li>
+                </ul>
+                <div class="card-body">
+                    <div class="float-right btn-group btn-group-sm">
+                        <a (click)="onOpenModal('edit', family)" class="btn btn-primary tooltips" data-placement="top" data-toggle="tooltip" data-original-title="Edit"><i class="fa fa-pencil"></i> </a>
+                        <a (click)="onOpenModal('delete', family)" class="btn btn-secondary tooltips" data-placement="top" data-toggle="tooltip" data-original-title="Delete"><i class="fa fa-times"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Family Modal -->
+    <div class="modal fade" id="addFamilyModal" tabindex="-1" role="dialog" aria-labelledby="addFamilyModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+           <div class="modal-header">
+              <h5 class="modal-title" id="addFamilyModalLabel">Add Family</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+              </button>
+           </div>
+           <div class="modal-body">
+              <form #addForm="ngForm" (ngSubmit)="onAddFamily(addForm)">
+              <div class="form-group">
+                 <label for="name">Name</label>
+                 <input type="text" ngModel name="name" class="form-control" id="name" placeholder="Name" required>
+              </div>
+              <div class="form-group">
+                 <label for="email">Email Address</label>
+                 <input type="email" ngModel name="email" class="form-control" id="email" placeholder="Email" required>
+              </div>
+              <div class="form-group">
+                 <label for="phone">Job title</label>
+                 <input type="text" ngModel name="jobTitle" class="form-control" id="jobTile" placeholder="Job title" required>
+              </div>
+              <div class="form-group">
+                 <label for="phone">Phone</label>
+                 <input type="text" ngModel name="phone" class="form-control" id="phone" placeholder="Phone" required>
+              </div>
+              <div class="form-group">
+                 <label for="phone">Image URL</label>
+                 <input type="text" ngModel name="imageUrl" class="form-control" id="imageUrl" placeholder="Image URL" required>
+              </div>
+              <div class="modal-footer">
+                 <button type="button" id="add-family-form" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                 <button [disabled]="addForm.invalid" type="submit" class="btn btn-primary" >Save changes</button>
+              </div>
+              </form>
+           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit modal -->
+    <div class="modal fade" id="editFamilyModal" tabindex="-1" role="dialog" aria-labelledby="familyEditModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+         <div class="modal-content">
+            <div class="modal-header">
+               <h5 class="modal-title" id="updateFamilyModalLabel">Edit Family {{editFamily?.name}}</h5>
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+               <span aria-hidden="true">&times;</span>
+               </button>
+            </div>
+            <div class="modal-body">
+               <form #editForm="ngForm">
+                  <div class="form-group">
+                     <label for="name">Name</label>
+                     <input type="text" ngModel="{{editFamily?.name}}" name="name" class="form-control" id="name" aria-describedby="emailHelp" placeholder="Name">
+                  </div>
+                  <input type="hidden" ngModel="{{editFamily?.id}}" name="id" class="form-control" id="id" placeholder="Email">
+                  <input type="hidden" ngModel="{{editFamily?.familyCode}}" name="userCode" class="form-control" id="userCode" placeholder="Email">
+                  <div class="form-group">
+                     <label for="email">Email Address</label>
+                     <input type="email" ngModel="{{editFamily?.email}}" name="email" class="form-control" id="email" placeholder="Email">
+                  </div>
+                  <div class="form-group">
+                     <label for="phone">Job title</label>
+                     <input type="text" ngModel="{{editFamily?.jobTitle}}" name="jobTitle" class="form-control" id="jobTitle" placeholder="Job title">
+                  </div>
+                  <div class="form-group">
+                     <label for="phone">Phone</label>
+                     <input type="text" ngModel="{{editFamily?.phone}}" name="phone" class="form-control" id="phone" name="phone" placeholder="Phone">
+                  </div>
+                  <div class="form-group">
+                     <label for="phone">Image URL</label>
+                     <input type="text" ngModel="{{editFamily?.imageUrl}}" name="imageUrl" class="form-control" id="imageUrl" placeholder="Image URL">
+                  </div>
+                  <div class="modal-footer">
+                     <button type="button" id="" data-dismiss="modal" class="btn btn-secondary">Close</button>
+                     <button (click)="onUpdateFamily(editForm.value)" data-dismiss="modal" class="btn btn-primary" >Save changes</button>
+                  </div>
+               </form>
+            </div>
+         </div>
+      </div>
+    </div>
+
+    <!-- Delete modal -->
+    <div class="modal fade" id="deleteFamilyModal" tabindex="-1" role="dialog" aria-labelledby="deleteModelLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+         <div class="modal-content">
+            <div class="modal-header">
+               <h5 class="modal-title" id="deleteModelLabel">Delete Family</h5>
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+               <span aria-hidden="true">&times;</span>
+               </button>
+            </div>
+            <div class="modal-body">
+               <p>Are you sure you want to delete family {{deleteFamily?.name}}?</p>
+               <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                  <button (click)="onDeleteFamily(deleteFamily!.id)" class="btn btn-danger" data-dismiss="modal">Yes</button>
+               </div>
+            </div>
+         </div>
+      </div>
+    </div>
+
+    <!-- Notification for no family -->
+  <div *ngIf="family123?.length == 0" class="col-lg-12 col-md-12 col-xl-12">
+    <div class="alert alert-info" role="alert">
+      <h4 class="alert-heading">NO FAMILY!</h4>
+      <p>No Family were found.</p>
+    </div>
+  </div>
+</div>
